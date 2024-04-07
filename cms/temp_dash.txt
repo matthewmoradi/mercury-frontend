@@ -1,0 +1,73 @@
+msg:
+public string code { get; set; }
+public string str { get; set; }
+public string data { get; set; }
+public bool success { get; set; }
+public int? size { get; set; } = 0;
+
+
+    public class attachment
+    {
+        public static string prefix { get; } = "attachment";
+        [Required]
+        public string id { get; set; }
+        public string content_id { get; set; }
+        public string category_id { get; set; }
+        public int loc { get; set; }
+        public string title { get; set; }
+        public string data { get; set; }
+        public DateTime dt { get; set; } = DateTime.Now;
+    }
+    public class category
+    {
+        public static string prefix { get; } = "category";
+        [Required]
+        public string id { get; set; }
+        public string parent { get; set; }
+        public string title { get; set; }
+        public string subtitle { get; set; }
+        public string loc { get; set; }
+        public List<attachment> attachments { get; set; } = new List<attachment>();
+    }
+    public class content
+    {
+        public static string prefix { get; } = "content";
+        [Required]
+        public string id { get; set; }
+        public string parent { get; set; }
+        public string category_id { get; set; }
+        public string title { get; set; }
+        public string subtitle { get; set; }
+        public string body { get; set; }
+        public DateTime dt_pub { get; set; } = DateTime.Now;
+        public DateTime date { get; set; } = DateTime.Now;
+        public DateTime dt { get; set; } = DateTime.Now;
+        public string img { set; get; }
+        public List<attachment> attachments { get; set; } = new List<attachment>();
+    }
+    public class faq
+    {
+        public static string prefix { get; } = "faq";
+        [Required]
+        public string id { get; set; }
+        public string group_id { get; set; }
+        [MaxLength(45)] public string title { get; set; }
+        [MaxLength(700)] public string body { get; set; }
+    }
+    public class user
+    {
+        public static string prefix { get; } = "user";
+        [Required]
+        public string id { get; set; }
+        [MaxLength(50)] public string ln { get; set; } // login name
+        [MaxLength(100)] public string pwd { get; set; } // [crypt]
+        [MaxLength(100)] public string prm { get; set; } // permisions [crypt]
+        public DateTime? l_l { get; set; } = null; // last login
+        public DateTime? l_f { get; set; } = null; // failed logins before last success login => if login == true => l_f = 0
+        public int l_f_c { get; set; } = 0; // failed logins before last success login => if login == true => l_f = 0
+        public int status { get; set; }
+        public string av { set; get; }
+        public string k { set; get; }
+        public string hash { set; get; }
+        public List<content> contents { get; set; } = new List<content>();
+    }

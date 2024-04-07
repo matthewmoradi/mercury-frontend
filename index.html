@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="stylesheet" href="//unicons.iconscout.com/release/v3.0.3/css/line.css">
+    <link type="text/css" rel="stylesheet" href="style.css?v=0.1.3" />
+    <link rel="icon" href="assets/images/logo.png" type="image/png">
+    <title>Mercury</title>
+</head>
+
+<body class="light" id="index">
+    <section id="loading" class="welcome none">
+        <div class="lds-spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </section>
+    <section id="skeleton" class="skeleton fcc fdc">
+        <div class="skeleton_header">
+            <div class="items fcc">
+                <div class="item">
+                    <div class="skeleton_header_anim_h">
+                        <div class="skeleton_header_anim"></div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div class="skeleton_header_anim_h">
+                        <div class="skeleton_header_anim"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="fcc w_100 h_100">
+            <div class="skeleton_aside">
+                <div class="items fcc fdc">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="skeleton_aside_anim_h">
+                    <div class="skeleton_aside_anim"></div>
+                </div>
+            </div>
+            <div class="skeleton_content">
+                <div class="items fcc fdc">
+                    <div class="title"></div>
+                    <div class="filter"></div>
+                    <div class="table"></div>
+                </div>
+                <div class="skeleton_content_anim_h">
+                    <div class="skeleton_content_anim"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="body_inner load">
+        <main id="main">
+            <section class="aside" id="sidebar">
+                <div class="header">
+                    <button type="button" class="i click_ignore" rv-on-click="ev.menu_show" data-el_id="menu">
+                        <i class="uil uil-bars"></i>
+                    </button>
+                    <input type="text" placeholder="search">
+                </div>
+                <div class="body fdc" rv-class-fss="scope.chats | is_not_empty"  rv-class-fcc="scope.chats | is_empty">
+                    <div rv-if="scope.chats | is_empty" class="tac w_90">
+                        <h3>{scope.lang.dictionary | lang_val 'You have no conversations yet'}</h3>
+                        <span>{scope.lang.dictionary | lang_val 'Start messaging by'}</span>
+                    </div>
+                    <div class="w_100 items">
+                        <div class="item _item_chat_ wrap__" rv-each-chat="scope.chats"
+                            rv-data-username="chat.username" rv-data-chat_id="chat.id" rv-on-click="ev.on_chat">
+                            <div class="avatar">
+                                <div class="circle" rv-show="chat.avatar">
+                                    <img rv-src="chat.avatar" alt="chat.title">
+                                </div>
+                                <div class="alt fcc" rv-hide="chat.avatar">
+                                    <h3>{chat.title | substr_ 0 1}</h3>
+                                </div>
+                            </div>
+                            <div class="w_100">
+                                <div class="w_100 fcb mar_ver">
+                                    <div class="fss fdc">
+                                        <span class="title">{chat.title}</span>
+                                    </div>
+                                    <span>{chat.dt}</span>
+                                </div>
+                                <span class="extra">{chat.message}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="new_chat">
+                    <button class="i circle" rv-on-click="ev.modal_show" data-modal_id="modal_contacts">
+                        <i class="uil uil-pen"></i>
+                    </button>
+                </div>
+            </section>
+            <section class="content">
+                <div class="header" rv-on-click="ev.on_content_header" rv-data-username="scope.chat.username" rv-show="scope.chat.title">
+                    <div class="info w_100 h_100">
+                        <div class="fcs fdc h_100 cp">
+                            <div class="title">{scope.chat.title}</div>
+                            <div class="extra">{scope.chat.last_seen}</div>
+                        </div>
+                    </div>
+                    <div class="tools fcc h_100">
+                        <div class="fcc tool">
+                            <i class="uil uil-search"></i>
+                        </div>
+                        <div class="fcc tool none">
+                            <i class="uil uil-phone"></i>
+                        </div>
+                        <div class="fcc tool">
+                            <i class="uil uil-voicemail-rectangle"></i>
+                        </div>
+                        <div class="fcc tool">
+                            <i class="uil uil-ellipsis-v"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="body" rv-class-fh="scope.chat.title | not">
+                    <div class="messages">
+                        <div class="message" rv-each-message="scope.chat.messages" rv-class-end="message.end | eq 'true'">
+                            <div class="avatar" rv-show="false">
+                                <div class="circle" rv-show="scope.user_info.avatar">
+                                    <img rv-src="message.user.avatar" alt="message.user.name">
+                                </div>
+                                <div class="alt fcc" rv-hide="scope.user_info.avatar">
+                                    <h3>{message.user.name | substr_ 0 1}</h3>
+                                </div>
+                            </div>
+                            <div class="message_body">
+                                <div class="text">
+                                    <p rv-class-rtl="message.rtl | eq 'true'">{message.text}</p>
+                                </div>
+                                <div class="info">
+                                    <div class="dt">
+                                        <span>{message.t}</span>
+                                    </div>
+                                    <div class="status">
+                                        <i rv-if="message.status | eq 0" class="uil uil-check color_label"></i>
+                                        <i rv-if="message.status | eq 1" class="uil uil-check-circle color_label"></i>
+                                        <i rv-if="message.status | eq 2" class="uil uil-check color_primary"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer fbe" rv-show="scope.chat.title">
+                    <label class="fcc tool" for="message_file">
+                        <i class="uil uil-paperclip"></i>
+                        <input type="file" id="message_file" rv-on-change="ev.files_to_base64">
+                    </label>
+                    <div class="input w_100">
+                        <div class="text" contenteditable="true" 
+                            id="message_text"
+                            rv-data-placeholder="scope.lang.dictionary | lang_val 'Write a message'" 
+                            rv-on-keyup="ev.on_message_keyup"></div>
+                    </div>
+                    <div class="fcc">
+                        <div class="fcc tool" rv-show="scope.message.txt | is_empty">
+                            <i class="uil uil-microphone"></i>
+                        </div>
+                        <div class="fcc tool">
+                            <i class="uil uil-smile"></i>
+                        </div>
+                        <div class="fcc tool" rv-show="scope.message.txt | is_empty">
+                            <i class="uil uil-camera"></i>
+                        </div>
+                        <div class="fcc tool color_primary" rv-show="scope.message.txt | is_not_empty" rv-on-click="ev.message">
+                            <i class="uil uil-message"></i>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <section class="menu" id="menu">
+            <div class="menu_inner click_ignore" id="menu_inner">
+                <div class="w_100 header fdc">
+                    <div class="fcb w_100">
+                        <div class="avatar cp">
+                            <div class="circle">
+                                <img src="assets/av/1.svg" rv-on-error="ev.img_def" data-src="assets/av/1.svg">
+                            </div>
+                            <img rv-if="scope.self.av" rv-src="scope.self.av" rv-on-error="ev.img_def" data-src="assets/av/1.svg">
+                            <!-- <h2 rv-if="scope.self.av | is_null">{scope.self.first_name | val '0'}</h2> -->
+                        </div>
+                        <div class="right fcc">
+                            <i class="uil uil-bookmark"></i>
+                        </div>
+                    </div>
+                    <div class="fcc fdc">
+                        <h3>{scope.self.name}</h3>
+                        <span>{scope.self.ln}</span>
+                    </div>
+                    <div class="buttons">
+                        <span class="" data-key="self_" rv-on-click="ev.get_" rv-data-d="scope.self.id">{scope.self.name} Matthew</span>
+                        <span class="fw_light" rv-on-click="ev.go_to_profile">{scope.self.username} 09013605066</span>
+                    </div>
+                </div>
+                <div class="fss fdc w_100 items">
+                    <div class="fsc w_100 item" rv-on-click="ev.modal_show" data-modal_id="modal_group_create">
+                        <i class="uil uil-users-alt"></i>
+                        <span class="caption">{scope.lang.dictionary | lang_val 'New Group'}</span>
+                    </div>
+                    <div class="fsc w_100 item" rv-on-click="ev.modal_show" data-modal_id="modal_channel_create">
+                        <i class="uil uil-megaphone"></i>
+                        <span class="caption">{scope.lang.dictionary | lang_val 'New Channel'}</span>
+                    </div>
+                    <div class="fsc w_100 item" rv-on-click="ev.modal_show" data-modal_id="modal_contacts">
+                        <i class="uil uil-user"></i>
+                        <span class="caption">{scope.lang.dictionary | lang_val 'Contacts'}</span>
+                    </div>
+                    <div class="fsc w_100 item" rv-on-click="ev.modal_show" data-modal_id="modal_calls">
+                        <i class="uil uil-phone"></i>
+                        <span class="caption">{scope.lang.dictionary | lang_val 'Calls'}</span>
+                    </div>
+                    <div class="fsc w_100 item" rv-on-click="ev.modal_show" data-modal_id="modal_settings">
+                        <i class="uil uil-setting"></i>
+                        <span class="caption">{scope.lang.dictionary | lang_val 'Settings'}</span>
+                    </div>
+                    <div class="fcb w_100 item">
+                        <div class="fcb">
+                            <i class="uil uil-moon"></i>
+                            <span class="caption">{scope.lang.dictionary | lang_val 'Night Mode'}</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="footer fss fdc w_100">
+                    <h3 class="app_title">{scope.lang.dictionary | lang_val 'App Title'}</h3>
+                    <div class="mar_ver">
+                        <span>{scope.lang.dictionary | lang_val 'App Version'}</span>
+                        <span> - </span>
+                        <span>{scope.lang.dictionary | lang_val 'About'}</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="overlay" id="overlay"></section>
+    </section>
+    <section class="modal" id="modal_delete">
+        <div class="form center true">
+            <form class="mini">
+                <section class="header">
+                    <div class="fcc">
+                        <h3>{scope.lang.dictionary | lang_val 'Confirm Delete'}</h3>
+                    </div>
+                    <button class="border mini" rv-on-click="ev.modal_close" data-modal_id="modal_text" type="button">{scope.lang.dictionary | lang_val 'Close'}</button>
+                    <!-- <i class="uil uil-times-circle" rv-on-click="ev.delete_no"></i> -->
+                </section>
+                <section class="actions">
+                    <button type="button" rv-on-click="ev.delete_no">{scope.lang.dictionary | lang_val 'No, Cancel'}</button>
+                    <button type="button" id="modal_delete_yes" class="danger" rv-on-click="ev.delete_yes" data-key="">{scope.lang.dictionary | lang_val 'Yes, Delete'}</button>
+                </section>
+            </form>
+        </div>
+    </section>
+    <section class="modal" id="modal_iframe">
+        <div class="cnt iframe">
+            <iframe></iframe>
+        </div>
+        <div class="response cnt fcc fdc w_100 none">
+            <img src="assets/images/logo.png" class="logo" alt="logo">
+            <h4 class="msg tac"></h4>
+            <i class="uil uil-times-circle close" rv-on-click="ev.modal_close" data-modal_id="modal_iframe"></i>
+            <i class="uil uil-check-circle successful color_success"></i>
+            <i class="uil uil-times-circle failed color_danger none"></i>
+        </div>
+    </section>
+    <section class="modal" id="modal_user_info">
+        <div class="modal_inner">
+            <section class="header w_100 fcb">
+                <h4 class="header_text">User Info</h4>
+                <div class="fcc">
+                    <!-- <i class="uil uil-ellipsis-v mar_hor cp" rv-on-click="ev.modal_close" data-modal_id="modal_user_info"></i> -->
+                    <i class="uil uil-times cp" rv-on-click="ev.modal_close" data-modal_id="modal_user_info"></i>
+                </div>
+            </section>
+            <section class="body">
+                <section class="fsc items">
+                    <div class="item w_100 nohov">
+                        <div class="avatar">
+                            <div class="circle" rv-show="scope.user_info.avatar">
+                                <img rv-src="scope.user_info.avatar" alt="scope.user_info.name">
+                            </div>
+                            <div class="alt fcc" rv-hide="scope.user_info.avatar">
+                                <h3>{scope.user_info.name | substr_ 0 1}</h3>
+                            </div>
+                        </div>
+                        <div class="fcs fdc">
+                            <span class="">{scope.user_info.name}</span>
+                            <span class="color_label mar_top_h">{scope.user_info.last_seen}</span>
+                        </div>
+                    </div>
+                </section>
+                <!--  -->
+                <section class="fcs fdc w_100 items">
+                    <div class="fss w_100">
+                        <div class="fss fdc w_100">
+                            <div class="fss w_100 item nohov">
+                                <div class="left">
+                                    <i class="uil uil-info"></i>
+                                </div>
+                                <div class="right fss fdc">
+                                    <span>{scope.user_info.bio}</span>
+                                    <label>{scope.lang.dictionary | lang_val 'Bio'}</label>
+                                </div>
+                            </div>
+                            <div class="fsc w_100 item nohov" rv-if="scope.user_info.phone">
+                                <div class="left">
+                                </div>
+                                <div class="right fss fdc">
+                                    <span>{scope.user_info.phone}</span>
+                                    <label>{scope.lang.dictionary | lang_val 'Mobile'}</label>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item nohov">
+                                <div class="left">
+                                </div>
+                                <div class="right fss fdc">
+                                    <span>@{scope.user_info.username}</span>
+                                    <label>{scope.lang.dictionary | lang_val 'Username'}</label>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item nohov">
+                                <div class="left"></div>
+                                <div class="right border_h">
+                                    <div class="border"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="fss fwrap w_100">
+                        <div class="fcc w_100 item">
+                            <div class="left">
+                                <i class="uil uil-bell"></i>
+                            </div>
+                            <div class="right fcb">
+                                <span>{scope.lang.dictionary | lang_val 'Notification'}</span>
+                                <label class="switch">
+                                    <input type="checkbox">
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="fsc w_100 item" rv-on-click="ev.on_send_message" rv-data-username="scope.user_info.username"
+                            rv-data-chat_id="scope.user_info.chat_id">
+                            <div class="left"></div>
+                            <div class="right fss">
+                                <span class="color_primary cp">{scope.lang.dictionary | lang_val 'Send Message'}</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--  -->
+                <section class="fcs fdc w_100 items">
+                    <div class="fss w_100">
+                        <div class="fss fdc w_100">
+                            <div class="fsc w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-image-v"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.user_info.shared_photos}</span>
+                                    <span> </span>
+                                    <span>{scope.lang.dictionary | lang_val 'photos'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-video"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.user_info.shared_videos}</span>
+                                    <span> </span>
+                                    <span>{scope.lang.dictionary | lang_val 'videos'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-file"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.user_info.shared_files}</span>
+                                    <span> </span>
+                                    <span>{scope.lang.dictionary | lang_val 'files'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-headphones"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.user_info.shared_audios}</span>
+                                    <span> </span>
+                                    <span>{scope.lang.dictionary | lang_val 'audio files'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-link"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.user_info.shared_links}</span>
+                                    <span> </span>
+                                    <span>{scope.lang.dictionary | lang_val 'shared links'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-microphone"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.user_info.shared_voices}</span>
+                                    <span> </span>
+                                    <span>{scope.lang.dictionary | lang_val 'voice messages'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-user"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.user_info.shared_groups}</span>
+                                    <span> </span>
+                                    <span>{scope.lang.dictionary | lang_val 'groups in Common'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--  -->
+                <section class="fcs fdc w_100 items">
+                    <div class="fss w_100">
+                        <div class="fss fdc w_100">
+                            <div class="fsc w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-list-ul"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Share this contact'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Edit contact'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Delete contact'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Clear history'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Delete chat'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                </div>
+                                <div class="right ">
+                                    <span class="color_danger">{scope.lang.dictionary | lang_val 'Block user'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </section>
+    <section class="modal" id="modal_group_create">
+        <div class="modal_inner min">
+            <form>
+                <div class="w_100 fcc">
+                    <div class="group_photo fcc">
+                        <input type="file">
+                        <i class="uil uil-camera"></i>
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder=" ">
+                        <label>Group Name</label>
+                    </div>
+                </div>
+                <div class="buttons fee w_100">
+                    <button type="button" rv-on-click="ev.modal_close" data-modal_id="modal_group_create">CANCEL</button>
+                    <button type="button">NEXT</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section class="modal" id="modal_channel_create">
+        <div class="modal_inner min">
+            <form>
+                <div class="w_100 fcc">
+                    <div class="group_photo fcc">
+                        <input type="file">
+                        <i class="uil uil-camera"></i>
+                    </div>
+                    <div class="input">
+                        <input type="text" placeholder=" ">
+                        <label>Channel Name</label>
+                    </div>
+                </div>
+                <div class="w_100 fcc">
+                    <div class="input w_100 mar_top_t">
+                        <textarea rv-on-keyup="ev.textarea_adjust" rv-on-keydown="ev.textarea_adjust" maxlength="250" placeholder=" " class="w_100"></textarea>
+                        <label>Description</label>
+                    </div>
+                </div>
+                <div class="buttons fee w_100">
+                    <button type="button" rv-on-click="ev.modal_close" data-modal_id="modal_channel_create">CANCEL</button>
+                    <button type="button">NEXT</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section class="modal" id="modal_contacts">
+        <div class="modal_inner mid">
+            <section class="header w_100 fcb fdc">
+                <div class="fcb w_100">
+                    <h4 class="header_text">Contacts</h4>
+                </div>
+                <div class="fcb w_100 mar_top_t" class="w_100 fcc" rv-if="scope.contacts | is_not_empty">
+                    <i class="uil uil-search rotate_180"></i>
+                    <input type="text" maxlength="50" placeholder="Search" class="w_90">
+                </div>
+            </section>
+            <section class="body">
+                <section class="empty_4 w_100"></section>
+                <section class="h_100">
+                    <div class="item contact fcc" rv-data-username="contact.username" rv-data-chat_id="contact.chat_id"
+                        rv-each-contact="scope.contacts" rv-on-click="ev.on_contact">
+                        <div class="avatar">
+                            <div class="circle">
+                                <img src="assets/av/6.svg">
+                            </div>
+                        </div>
+                        <div class="w_80 fss fdc">
+                            <span>{contact.name}</span>
+                            <label>{contact.last_seen}</label>
+                        </div>
+                    </div>
+                    <div class="w_100 fcc" rv-if="scope.contacts | is_empty">
+                        <h4 class="w_60 tac">{scope.lang.dictionary | lang_val 'You dont have any contact'}</h4>
+                    </div>
+                </section>
+                <section class="empty_4 w_100"></section>
+            </section>
+            <section class="footer w_100 fcb">
+                <div class="fcb w_100">
+                    <button type="button" rv-on-click="ev.modal_show" data-modal_id="modal_contact_create">ADD CONTACT</button>
+                    <button type="button" rv-on-click="ev.modal_close" data-modal_id="modal_contacts">CLOSE</button>
+                </div>
+            </section>
+        </div>
+    </section>
+    <section class="modal" id="modal_contact_create">
+        <div class="modal_inner mid">
+            <section class="header w_100 fcb fdc no_b">
+                <div class="fcb w_100">
+                    <h4 class="header_text">New Contact</h4>
+                </div>
+            </section>
+            <form>
+                <!-- <div class="w_100 fsc">
+                    <div class="w_10 mar_end_t">
+                        <i class="uil uil-user"></i>
+                    </div>
+                    <div class="input w_90">
+                        <input class="w_100" type="text" placeholder=" ">
+                        <label>First Name</label>
+                    </div>
+                </div>
+                <div class="w_100 fsc mar_top_t">
+                    <div class="w_10 mar_end_t">
+                    </div>
+                    <div class="input w_90">
+                        <input class="w_100" type="text" placeholder=" ">
+                        <label>Last Name</label>
+                    </div>
+                </div> -->
+                <div class="w_100 fsc mar_top_t">
+                    <div class="w_10 mar_end_t">
+                        <i class="uil uil-user-circle"></i>
+                    </div>
+                    <div class="input w_90">
+                        <input class="w_100" type="text" placeholder=" " rv-value="scope.contact.username">
+                        <label>Username</label>
+                    </div>
+                </div>
+                <div class="buttons fee w_100">
+                    <button type="button" rv-on-click="ev.modal_close" data-modal_id="modal_contact_create">CANCEL</button>
+                    <button type="button" rv-on-click="ev.contact_add">CREATE</button>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section class="modal" id="modal_calls">
+        <div class="modal_inner mid">
+            <section class="header w_100 fcb">
+                <h4 class="header_text">Calls</h4>
+                <i class="uil uil-ellipsis-v cp"></i>
+            </section>
+            <section class="body">
+                <section>
+                    <div class="item ci contact fcb" rv-each-contact="scope.contacts">
+                        <div class="fcc w_90">
+                            <div class="avatar">
+                                <div class="circle">
+                                    <img src="assets/av/6.svg">
+                                </div>
+                            </div>
+                            <div class="w_80 fss fdc">
+                                <span>Asad</span>
+                                <div class="fcc">
+                                    <i class="uil uil-arrow-down-left color_success"></i>
+                                    <label>May 7 at 11:22 AM</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cp">
+                            <i class="uil uil-phone-alt"></i>
+                        </div>
+                    </div>
+                </section>
+            </section>
+            <section class="footer w_100 fcb">
+                <div class="fcb w_100">
+                    <button type="button">ADD CONTACT</button>
+                    <button type="button" rv-on-click="ev.modal_close" data-modal_id="modal_calls">CLOSE</button>
+                </div>
+            </section>
+        </div>
+    </section>
+    <section class="modal" id="modal_settings">
+        <div class="modal_inner">
+            <section class="header w_100 fcb">
+                <h4 class="header_text">Settings</h4>
+                <div class="fcc">
+                    <i class="uil uil-ellipsis-v mar_hor cp"></i>
+                    <i class="uil uil-times cp" rv-on-click="ev.modal_close" data-modal_id="modal_settings"></i>
+                </div>
+            </section>
+            <section class="body">
+                <section class="fsc items">
+                    <div class="item w_100 nohov">
+                        <div class="avatar">
+                            <div class="circle">
+                                <img src="assets/av/10.svg" alt="img_alt">
+                            </div>
+                        </div>
+                        <div class="fcs fdc">
+                            <span>Alex</span>
+                            <span>last seen recently</span>
+                        </div>
+                    </div>
+                </section>
+                <!--  -->
+                <section class="fcs fdc w_100 items">
+                    <div class="fss w_100">
+                        <div class="fss fdc w_100">
+                            <div class="fsc w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-info-circle"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Edit Profile'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-bell"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Notifications'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-lock-alt"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Privacy and Security'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-comment-alt"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Chat Settings'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-folder"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Folders'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-sliders-v-alt"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Advanced'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-letter-english-a"></i>
+                                </div>
+                                <div class="right ">
+                                    <div class="fcb w_100">
+                                        <span>{scope.lang.dictionary | lang_val 'Languages'}</span>
+                                        <span class="color_primary">English</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!--  -->
+                <section class="fcs fdc w_100 items">
+                    <div class="fss w_100">
+                        <div class="fss fdc w_100">
+                            <div class="fsc w_100 item">
+                                <div class="left">
+                                    <i class="uil uil-question-circle"></i>
+                                </div>
+                                <div class="right ">
+                                    <span>150</span>
+                                    <span>{scope.lang.dictionary | lang_val 'Telegram FAQ'}</span>
+                                </div>
+                            </div>
+                            <div class="fss w_100 item">
+                                <div class="left">
+                                </div>
+                                <div class="right ">
+                                    <span>{scope.lang.dictionary | lang_val 'Ask a question'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+        </div>
+    </section>
+    <section class="modal" id="modal_files">
+        <div class="modal_inner mid_static">
+            <form>
+                <div rv-show="scope.message.files | len | geq 2">
+                    <h3>{scope.message.files | len} files selected</h3>
+                </div>
+                <div class="files">
+                    <div class="file" rv-each-file="scope.message.files" rv-class-img="file.type | contains 'image'">
+                        <div class="img" rv-show="file.type | contains 'image'">
+                            <img class="w_100" rv-src="file.src">
+                            <i class="uil uil-trash delete" rv-on-click="ev.files_delete" rv-data-i="%file%"></i>
+                        </div>
+                        <div class="fsc other" rv-show="file.type | ncontains 'image'">
+                            <div class="w_10 icon i circle mar_end" rv-if="file.type | contains 'text'">
+                                <i class="uil uil-file"></i>
+                            </div>
+                            <div class="w_10 i icon circle mar_end" rv-if="file.type | contains_ 'audio' 'video'">
+                                <i class="uil uil-play"></i>
+                            </div>
+                            <div class="fcs fdc w_90">
+                                <div class="fcb w_100">
+                                    <span>{file.title | file_name}</span>
+                                    <i class="uil uil-trash delete" rv-on-click="ev.files_delete" rv-data-i="%file%"></i>
+                                </div>
+                                <span>{file.size | file_size}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="w_100 fsc mar_top_t">
+                    <div class="input w_100">
+                        <input class="w_100" type="text" placeholder=" " rv-value="scope.contact.username">
+                        <label>Caption</label>
+                    </div>
+                </div>
+                <div class="fcb buttons w_100">
+                    <div>
+                        <button type="button" rv-on-click="ev.files_add">ADD</button>
+                    </div>
+                    <div class="fee w_100">
+                        <button type="button" rv-on-click="ev.modal_close_files">CANCEL</button>
+                        <button type="button" rv-on-click="ev.message_send">SEND</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+    <section class="toast">
+        <i class="uil uil-times-circle close"></i>
+        <span class="toast_msg">This is a toast message</span>
+    </section>
+    <img id="img_def" src="assets/images/default.png" class="none" />
+    <audio id="notif_sound" src="assets/sounds/notification.mp3" type="audio/mpeg" class="none"></audio>
+    <div id="elem_temp" style="display: none;"></div>
+    <script src="js/rivets.bundled.min.js"></script>
+    <!-- <script src="js/chart.js"></script> -->
+    <script src="js/consts.js?v=0.1.5"></script>
+    <script src="js/index.js?v=0.1.5"></script>
+    <script src="js/ev.js?v=0.1.5"></script>
+</body>
+
+</html>

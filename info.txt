@@ -1,0 +1,8 @@
+
+index: 
+if not_logged_in => redirect to login
+else init
+====================================
+login: 
+if logged_in => redirect to index
+else 
