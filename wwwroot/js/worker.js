@@ -25,7 +25,7 @@ onmessage = async function (e) {
     } else if (_msg.action == "consts_init") {
         msg.action = "consts_init";
         try{
-            var res = await consts_init(_msg.data.url_server, _msg.data.id, _msg.data.user_key, _msg.data.token, _msg.data.sep, _msg.data.is_login);
+            var res = await consts_init(_msg.data.url_server, _msg.data.url_server_message, _msg.data.id, _msg.data.user_key, _msg.data.token, _msg.data.sep, _msg.data.is_login);
             msg.data = res;
         }
         catch(ex) {
@@ -200,6 +200,7 @@ function utf8_encode(s) {
  * Gets preferences, languages, modules and schema from server
  * 
  * @param {string} url_server the URL of server.
+ * @param {string} url_server_message the URL of message server.
  * @param {string} id user id.
  * @param {string} key user key for encryption.
  * @param {string} token user token.
@@ -208,13 +209,13 @@ function utf8_encode(s) {
  * 
  * @return {Promise<void>}
  */
-async function consts_init(url_server, id, key, token, sep, is_login) {
+async function consts_init(url_server, url_server_message, id, key, token, sep, is_login) {
     var d = {}, res = {};
     var res_byte, res_str;
 
     //get chats
     d = params_to({action: "chat_get"})
-    res_byte = await fetch(url_server + "wind", fetchd(d, id, token));
+    res_byte = await fetch(url_server_message + "wind", fetchd(d, id, token));
     res_str = await res_byte.text();
     res.chats = params_from(res_str);
 

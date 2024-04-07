@@ -129,7 +129,8 @@ function object_to_param_string(obj) {
  */
 function params_to(d) {
     if (!d) return "";
-    d = utf8_encode(JSON.stringify(d));
+    // d = utf8_encode(JSON.stringify(d));
+    d = JSON.stringify(d);
     return d;
 }
 
@@ -366,7 +367,7 @@ function fetchd(data) {
     let f = {
         method: "POST",
         headers: {
-            user_id: scope.self.user_id,
+            user_id: scope.self.id,
             token: scope.self.token,
         }
     };
@@ -866,7 +867,7 @@ function location_get() {
  */
 function logout(delay = 100) {
     console.log("in logout");
-    return;
+    // return;
     setTimeout(function () {
         cookie_delete("token");
         cookie_delete("user_id");
@@ -1144,6 +1145,7 @@ function consts_init() {
         data: {
             is_login: window.location.href.indexOf('login') != -1,
             url_server: scope.url.server,
+            url_server_message: scope.url.server_message,
             id: scope.self.id,
             user_key: scope.self.key,
             token: scope.self.token,
@@ -1323,6 +1325,7 @@ function get_server_addr()
         return res.json();
     }).then(function (resp) {
         scope.url.server = resp.root;
+        scope.url.server_message = resp.root_message;
         init();
     }).catch(err => {
         toast("Fail to get server address, please contact support.", -1);

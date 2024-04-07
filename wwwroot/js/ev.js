@@ -402,7 +402,7 @@ ev.message = async function () {
     }
     d = params_to(d);
     // 
-    d = await fetch__(scope.url.server + "wind", fetchd(d));
+    d = await fetch__(scope.url.server_message + "wind", fetchd(d));
     if (d.success != true) {
         if (d.str && d.str != "") {
             toast(d.str, -1);
@@ -456,7 +456,7 @@ ev.chat_get_or_add = async function (id, username) {
     }
     d = params_to(d);
     // 
-    d = await fetch__(scope.url.server + "wind", fetchd(d));
+    d = await fetch__(scope.url.server_message + "wind", fetchd(d));
     if (!d || d.success != true) {
         if (d.str && d.str != "") {
             toast(d.str, -1);
