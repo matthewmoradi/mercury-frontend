@@ -365,6 +365,10 @@ function min2(str) { //
 function fetchd(data) {
     let f = {
         method: "POST",
+        headers: {
+            user_id: scope.self.user_id,
+            token: scope.self.token,
+        }
     };
     if (data && data != "") f.body = object_to_param_string(data);
     return f;
@@ -666,7 +670,7 @@ function is_in(x, arr) {
  * @return {boolean} true/false
  */
 function validate_required(input) {
-    if (input == null || input == undefined || input === "" || input === {}) return false;
+    if (input == null || input == undefined || input === "" || input == {}) return false;
     return true;
 }
 
@@ -862,7 +866,7 @@ function location_get() {
  */
 function logout(delay = 100) {
     console.log("in logout");
-    // return;
+    return;
     setTimeout(function () {
         cookie_delete("token");
         cookie_delete("user_id");
@@ -1113,11 +1117,11 @@ async function init_index() {
  */
 function init_self() {
     var is_login = window.location.href.indexOf('login') != -1;
-    let token = cookie_get("token");
-    let user_id = cookie_get("user_id");
+    let token = localStorage.getItem("token");
+    let user_id = localStorage.getItem("user_id");
     scope.self = {};
     scope.self.token = token;
-    scope.self.user_id = user_id;
+    scope.self.id = user_id;
     if (token == null || user_id == null){
         if (!is_login) { //index
             logout();

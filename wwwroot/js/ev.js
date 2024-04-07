@@ -313,10 +313,8 @@ ev.login = async function () {
         if (typeof d.data == "string") d.data = JSON.parse(d.data);
         scope.self = d.data.self;
         scope.self.token = d.data.token;
-        var d_user = JSON.stringify(scope.self);
-        var d_forward = {
-            user: d_user,
-        };
+        localStorage.setItem("user_id", scope.self.id);
+        localStorage.setItem("token", scope.self.token);
         location.href = "/";
     } else {
         // toast("fail: " + d.msg, -1);

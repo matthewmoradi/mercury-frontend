@@ -122,9 +122,13 @@ function upload_abort(i) {
  *
  * @return {string} str with at least 2 digit length
  */
- function fetchd(data) {
+ function fetchd(data, id, token) {
     let f = {
         method: "POST",
+        headers: {
+            user_id: id,
+            token: token,
+        }
     };
     if (data && data != "") f.body = data;
     return f;
@@ -210,25 +214,25 @@ async function consts_init(url_server, id, key, token, sep, is_login) {
 
     //get chats
     d = params_to({action: "chat_get"})
-    res_byte = await fetch(url_server + "wind", fetchd(d));
+    res_byte = await fetch(url_server + "wind", fetchd(d, id, token));
     res_str = await res_byte.text();
     res.chats = params_from(res_str);
 
     //get contacts
     d = params_to({action: "contact_get"})
-    res_byte = await fetch(url_server + "wind", fetchd(d));
+    res_byte = await fetch(url_server + "wind", fetchd(d, id, token));
     res_str = await res_byte.text();
     res.contacts = params_from(res_str);
 
     //get settings
     d = params_to({action: "user_get_settings"})
-    res_byte = await fetch(url_server + "wind", fetchd(d));
+    res_byte = await fetch(url_server + "wind", fetchd(d, id, token));
     res_str = await res_byte.text();
     res.settings = params_from(res_str);
 
     //get_ preference
     d = params_to({action: "preference_get_"})
-    res_byte = await fetch(url_server + "wind", fetchd(d));
+    res_byte = await fetch(url_server + "wind", fetchd(d, id, token));
     res_str = await res_byte.text();
     res.preference = params_from(res_str);
 
