@@ -464,6 +464,10 @@ ev.chat_get_or_add = async function (id, username) {
         return null;
     }
     //success
+    setTimeout(_ => {
+        let msgs = $(".content .body .messages");
+        msgs.scrollTo(0, msgs.scrollHeight);
+    }, 200);
     return d.data;
 }
 
@@ -1526,7 +1530,7 @@ ev.files_to_base64 = async function () {
     let res = await get_uploading_files(files);
     this.type = "text";
     this.type = "file";
-    if(!scope.message.files || !scope.message.files.length)
+    if (!scope.message.files || !scope.message.files.length)
         scope.message.files = [];
     scope.message.files = scope.message.files.concat(res);
     ev.modal_show_do("modal_files", false);
@@ -1549,10 +1553,10 @@ ev.files_add = async function () {
  * 
  * @return {void}
  */
-ev.files_delete = function(){
+ev.files_delete = function () {
     let i = parseInt(this.dataset.i);
     scope.message.files.splice(i, 1);
-    if(scope.message.files.length == 0)
+    if (scope.message.files.length == 0)
         ev.modal_close_files();
 }
 
@@ -1758,7 +1762,7 @@ ev.modal_close = function () {
  * 
  * @return {void}
  */
- ev.modal_close_files = function () {
+ev.modal_close_files = function () {
     scope.message.files = [];
     $("#modal_files").classList.remove("true");
 }
@@ -2069,14 +2073,14 @@ rivets.formatters.ncontains = function (x, y) {
     return x.search(y) == -1;
 }
 rivets.formatters.contains_ = function (x, ...args) {
-    for(let i=0; i<args.length; i++)
-        if(x.search(args[i]) > -1)
+    for (let i = 0; i < args.length; i++)
+        if (x.search(args[i]) > -1)
             return true;
     return false;
 }
 rivets.formatters.ncontains_ = function (x, ...args) {
-    for(let i=0; i<args.length; i++)
-        if(x.search(args[i]) > -1)
+    for (let i = 0; i < args.length; i++)
+        if (x.search(args[i]) > -1)
             return false;
     return true;
 }
@@ -2129,19 +2133,19 @@ rivets.formatters.not_ = function (x) {
 }
 rivets.formatters.file_size = function (size) {
     if (!size) return "";
-    if(size.toString().length <= 3)
+    if (size.toString().length <= 3)
         return size + " B";
-    if(size.toString().length <= 6)
+    if (size.toString().length <= 6)
         return (size / 1024).toFixed(0) + " KB";
-    if(size.toString().length <= 9)
+    if (size.toString().length <= 9)
         return (size / (1024 * 1024)).toFixed(1) + " MB";
-    if(size.toString().length <= 12)
+    if (size.toString().length <= 12)
         return (size / (1024 * 1024 * 1024)).toFixed(2) + " GB";
     return "TOO BIG!";
 }
 rivets.formatters.file_name = function (name) {
     if (!name) return name;
-    if(name.length < 30) return name;
+    if (name.length < 30) return name;
     let end = name.substr(name.length - 8);
     let start = name.substr(0, 19);
     return start + "..." + end;

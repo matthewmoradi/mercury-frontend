@@ -127,6 +127,24 @@ function object_to_param_string(obj) {
  *
  * @return {string} server readable encrypted parameters.
  */
+function params_to_socket(d) {
+    if (!d) return "";
+    d.user_id = scope.self.id;
+    d.token = scope.self.token;
+    d = JSON.stringify(d);
+    return d;
+}
+
+/**
+ * Wraps xhr parameters in custom packet.
+ *
+ * All xhr parameters will be wrap as follow:
+ * object->stringify->utf8_encode->to_base64->encrypt->to_base64
+ *
+ * @param {object} d parameters object.
+ *
+ * @return {string} server readable encrypted parameters.
+ */
 function params_to(d) {
     if (!d) return "";
     // d = utf8_encode(JSON.stringify(d));
@@ -1186,31 +1204,6 @@ async function consts_init_sync() {
         });
     }
 
-    //get modules
-    const res_modules = await fetch(scope.url.server + "modules", fetchd(params_to({
-        token: scope.self.token
-    })));
-    const txt_modules = await res_modules.text();
-    scope.modules_top = JSON.parse(utf8_decode(atob(txt_modules)));
-    if (scope.modules_top.length != 0) {
-        scope.url.server = scope.modules_top[0].addr;
-        scope.logo = scope.modules_top[0].logo;
-        if (scope.url.server[scope.url.server.length - 1] != '/')
-            scope.url.server += "/";
-    }
-
-    //get schema
-    const res_schema = await fetch(scope.url.server + "schema", fetchd(params_to({
-        token: scope.self.token
-    })));
-    const d = await res_schema.text();
-    var consts_ = JSON.parse(utf8_decode(atob(d)));
-    if (consts_.length == 0) {
-        console.log("In consts_init_sync, bad data, schema is empty!");
-        toast("In init, not authed! logging out", 0);
-        return logout(3000);
-    }
-    schema_set(consts_);
     return new Promise(resolve => {
         resolve('resolved');
     });
@@ -1303,6 +1296,7 @@ async function init() {
     }
     
     await init_index();
+    socket_init();
     try {
         if (window.Worker) {
             consts_init(); //calls worker, worker_handler get the response
@@ -1326,6 +1320,7 @@ function get_server_addr()
     }).then(function (resp) {
         scope.url.server = resp.root;
         scope.url.server_message = resp.root_message;
+        scope.url.ws = resp.ws;
         init();
     }).catch(err => {
         toast("Fail to get server address, please contact support.", -1);
