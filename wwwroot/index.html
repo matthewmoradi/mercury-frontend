@@ -85,7 +85,7 @@
                     </div>
                     <div class="w_100 items">
                         <div class="item _item_chat_ wrap__" rv-each-chat="scope.chats"
-                            rv-data-username="chat.username" rv-data-chat_id="chat.id" rv-on-click="ev.on_chat">
+                            rv-data-username="chat.username" rv-data-chat_id="chat.id" rv-data-unread="chat.unread" rv-on-click="ev.on_chat">
                             <div class="avatar">
                                 <div class="circle" rv-show="chat.avatar">
                                     <img rv-src="chat.avatar" alt="chat.title">
@@ -101,7 +101,10 @@
                                     </div>
                                     <span>{chat.dt}</span>
                                 </div>
-                                <span class="extra">{chat.message}</span>
+                                <div class="w_100 fcb">
+                                    <span class="extra">{chat.message}</span>
+                                    <span class="badge" rv-if="chat.unread">{chat.unread}</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,7 +176,7 @@
                         <div class="text" contenteditable="true" 
                             id="message_text"
                             rv-data-placeholder="scope.lang.dictionary | lang_val 'Write a message'" 
-                            rv-on-keyup="ev.on_message_keyup"></div>
+                            rv-on-keydown="ev.on_message_keydown"></div>
                     </div>
                     <div class="fcc">
                         <div class="fcc tool" rv-show="scope.message.txt | is_empty">
@@ -207,13 +210,13 @@
                             <i class="uil uil-bookmark"></i>
                         </div>
                     </div>
-                    <div class="fcc fdc">
+                    <!-- <div class="fcc fdc">
                         <h3>{scope.self.name}</h3>
                         <span>{scope.self.ln}</span>
-                    </div>
+                    </div> -->
                     <div class="buttons">
-                        <span class="" data-key="self_" rv-on-click="ev.get_" rv-data-d="scope.self.id">{scope.self.name} Matthew</span>
-                        <span class="fw_light" rv-on-click="ev.go_to_profile">{scope.self.username} 09013605066</span>
+                        <span class="" data-key="self_" rv-on-click="ev.get_" rv-data-d="scope.self.id">{scope.self.name}</span>
+                        <span class="fw_light" rv-on-click="ev.go_to_profile">@{scope.self.username}</span>
                     </div>
                 </div>
                 <div class="fss fdc w_100 items">
@@ -840,6 +843,7 @@
     <script src="js/rivets.bundled.min.js"></script>
     <!-- <script src="js/chart.js"></script> -->
     <script src="js/consts.js?v=0.1.7"></script>
+    <script src="js/ws_handle.js?v=0.1.7"></script>
     <script src="js/ws.js?v=0.1.7"></script>
     <script src="js/index.js?v=0.1.7"></script>
     <script src="js/ev.js?v=0.1.7"></script>

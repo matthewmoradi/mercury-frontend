@@ -909,6 +909,7 @@ $color_dark_disabled: #01070e;
 // #region html tags
 * {
     box-sizing: border-box;
+    user-select: none;
 }
 
 *:focus {
@@ -1812,17 +1813,27 @@ main.expand .aside span {
     @include color_txt_primary();
 }
 
-.aside .item span {
+.aside .extra {
     font-size: 0.9em;
     @include color_txt_label();
 }
 
-.aside .item span.warning {
+.aside .extra.warning {
     @include color_txt_primary();
 }
 
 .aside .avatar .alt {
     @include background_color_quaternary();
+}
+
+.badge {
+    @include background_color_tertiary();
+    @include color_txt_tertiary();
+    border-radius: 45%;
+    padding: 3px;
+    font-size: 0.75em;
+    min-width: 18px;
+    text-align: center;
 }
 
 .avatar {
@@ -2304,6 +2315,8 @@ main.expand .content {
 
 .message .message_body p {
     margin: 0;
+    white-space: pre-wrap;
+    user-select: initial;
 }
 
 .message .info {
@@ -3383,13 +3396,13 @@ form{
 // #endregion
 
 // #region media queries
-@media all and(max-width: 1360px) {
+@media all and (max-width: 1360px) {
     html {
         // font-size: 0.8em;
     }
 }
 
-@media all and(max-width: 900px) {
+@media all and (max-width: 900px) {
     .aside {
         width: 20%;
     }

@@ -420,7 +420,7 @@ ev.message = async function () {
  * 
  * @param {string} username from scope, username
  * 
- * @return {void}
+ * @return {Promise<object>}
  */
 ev.user_get_ = async function (username) {
     var d = {
@@ -441,14 +441,27 @@ ev.user_get_ = async function (username) {
 }
 
 /**
+ * Gets the chat list.
+ * 
+ * @return {Promise<object>}
+ */
+ev.chat_get_list = async function () {
+    d = params_to({ action: "chat_get_list" })
+    res_byte = await fetch(scope.url.server_message + "wind", fetchd(d));
+    res_str = await res_byte.text();
+    scope.chats = params_from(res_str).data;
+}
+
+/**
  * Gets chat messages and info.
  * 
  * @param {string} id from scope, id
  * @param {string} username from scope, target username, required if id is null
+ * @param {int} unread from scope, count of unread messages in the chat
  * 
  * @return {Promise<object>}
  */
-ev.chat_get_or_add = async function (id, username) {
+ev.chat_get_or_add = async function (id, username, unread) {
     var d = {
         action: "chat_get_or_add",
         id: id ? id : "",
@@ -457,10 +470,10 @@ ev.chat_get_or_add = async function (id, username) {
     d = params_to(d);
     // 
     d = await fetch__(scope.url.server_message + "wind", fetchd(d));
-    if (!d || d.success != true) {
-        if (d.str && d.str != "") {
-            toast(d.str, -1);
-        }
+    if (!d)
+        return null;
+    if (!d.success) {
+        toast(d.str, -1);
         return null;
     }
     //success
@@ -468,6 +481,7 @@ ev.chat_get_or_add = async function (id, username) {
         let msgs = $(".content .body .messages");
         msgs.scrollTo(0, msgs.scrollHeight);
     }, 200);
+    ev.on_chat_open(d.data.id, unread);
     return d.data;
 }
 
@@ -504,9 +518,16 @@ ev.on_content_header = async function () {
  * 
  * @return {void}
  */
-ev.on_message_keyup = function () {
+ev.on_message_keydown = function (e) {
     if (this.innerText == "<br>" || this.innerText == "\n")
         this.innerText = "";
+    if(!e.shiftKey && e.key == "Enter") {
+        e.preventDefault();
+        e.stopPropagation();
+        scope.message.txt = this.innerText;
+        ev.message();
+        return;
+    }
     scope.message.txt = this.innerText;
 }
 
@@ -519,7 +540,7 @@ ev.on_message_keyup = function () {
  * @return {void}
  */
 ev.on_chat = async function () {
-    scope.chat = await ev.chat_get_or_add(this.dataset.chat_id, this.dataset.username);
+    scope.chat = await ev.chat_get_or_add(this.dataset.chat_id, this.dataset.username, this.dataset.unread);
     $$("._item_chat_").forEach(item => {
         item.classList.remove("selected")
     });
@@ -537,6 +558,32 @@ ev.on_chat = async function () {
 ev.on_send_message = async function () {
     scope.chat = await ev.chat_get_or_add(this.dataset.chat_id, this.dataset.username);
     ev.modal_close_all();
+}
+
+/**
+ * Sends a request to update read flag of messages in a chat.
+ * 
+ * @param {string} chat_id from parameters, chat id
+ * 
+ * @return {Promise<object>}
+ */
+ev.on_chat_open = async function (chat_id, unread) {
+    if (!unread || unread <= 0)
+        return;
+    var d = {
+        action: "chat_set_read",
+        id: chat_id,
+    }
+    d = params_to(d);
+    // 
+    d = await fetch__(scope.url.server_message + "wind", fetchd(d));
+    if (!d)
+        return;
+    if (!d.success) {
+        toast(d.str, -1);
+        return;
+    }
+    await ev.chat_get_list();
 }
 //#endregion
 
@@ -1880,7 +1927,7 @@ ev.worker_handle = function (e) {
             consts_init_from_worker_failed(data.str);
         else {
             console.log(data.data);
-            consts_init_from_worker(data.data.preference, data.data.chats, data.data.contacts, data.data.settings);
+            consts_init_from_worker(data.data.self, data.data.preference, data.data.chats, data.data.contacts, data.data.settings);
         }
     }
 }

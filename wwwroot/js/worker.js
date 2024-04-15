@@ -214,7 +214,13 @@ async function consts_init(url_server, url_server_message, id, key, token, sep, 
     var res_byte, res_str;
 
     //get chats
-    d = params_to({action: "chat_get"})
+    d = params_to({action: "self_get"})
+    res_byte = await fetch(url_server + "wind", fetchd(d, id, token));
+    res_str = await res_byte.text();
+    res.self = params_from(res_str);
+
+    //get chats
+    d = params_to({action: "chat_get_list"})
     res_byte = await fetch(url_server_message + "wind", fetchd(d, id, token));
     res_str = await res_byte.text();
     res.chats = params_from(res_str);

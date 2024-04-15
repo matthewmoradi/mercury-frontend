@@ -887,8 +887,8 @@ function logout(delay = 100) {
     console.log("in logout");
     // return;
     setTimeout(function () {
-        cookie_delete("token");
-        cookie_delete("user_id");
+        localStorage.removeItem("token");
+        localStorage.removeItem("user_id");
         window.location.href = "login";
     }, delay)
 }
@@ -1182,6 +1182,8 @@ async function consts_init_sync() {
     if (!scope.self || !scope.self.token)
         return;
 
+    await ev.chat_get_list();
+
     //get preferences
     const res_pref = await fetch(scope.url.server + "pref", fetchd(params_to({
         token: scope.self.token
@@ -1224,12 +1226,15 @@ async function consts_init_from_worker_failed() {
  *
  * @return {void}
  */
-async function consts_init_from_worker(preference, chats, contacts, settings) {
+async function consts_init_from_worker(self, preference, chats, contacts, settings) {
     if (!scope.self || !scope.self.token)
         return;
 
+    //self
+    scope.self = self.data;
+
     //preferences
-    scope.preference = preference;
+    scope.preference = preference.data;
     $('title').innerText = scope.preference.app_name;
 
     scope.chats = chats.data;
@@ -1256,7 +1261,6 @@ async function is_vendor_offer() {
     }
     return false;
 }
-
 
 /**
  * Initialize the app for all pages
@@ -1294,7 +1298,6 @@ async function init() {
         init_login();
         return;
     }
-    
     await init_index();
     socket_init();
     try {
@@ -1302,7 +1305,6 @@ async function init() {
             consts_init(); //calls worker, worker_handler get the response
         } else {
             await consts_init_sync();
-            await init_index();
         }
     } catch (ex) {
         console.log("in init, logout");

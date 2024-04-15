@@ -35,8 +35,8 @@ socket_onmessage = async function (event) {
             return;
         }
         case "message": {
-            let message = JSON.parse(msg_ws.data);
-            scope.chat = await ev.chat_get_or_add(message.chat_id);
+            ws_message(msg_ws);
+            break;
         }
     }
 };
