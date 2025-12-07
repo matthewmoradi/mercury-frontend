@@ -149,7 +149,7 @@
                                     <h3>{message.user.name | substr_ 0 1}</h3>
                                 </div>
                             </div>
-                            <div class="message_body">
+                            <div class="message_body" rv-on-contextmenu="ev.show_message_options">
                                 <div class="text">
                                     <p rv-class-rtl="message.rtl | eq 'true'">{message.text}</p>
                                 </div>
@@ -163,33 +163,84 @@
                                         <i rv-if="message.status | eq 2" class="uil uil-check color_primary"></i>
                                     </div>
                                 </div>
+                                <!-- <div class="message_arrow" rv-on-click="ev.show_message_options">
+                                    <i class="uil uil-angle-down"></i>
+                                </div> -->
+                                <div class="options none" rv-data-i="%message%">
+                                    <div class="option" rv-on-click="ev.message_edit_prepare">
+                                        <i class="uil uil-share reverse"></i>
+                                        <span>{scope.lang.dictionary | lang_val 'Reply'}</span>
+                                    </div>
+                                    <div class="option">
+                                        <i class="uil uil-pen"></i>
+                                        <span>{scope.lang.dictionary | lang_val 'Edit'}</span>
+                                    </div>
+                                    <div class="option">
+                                        <i class="uil uil-comment-heart"></i>
+                                        <span>{scope.lang.dictionary | lang_val 'Pin'}</span>
+                                    </div>
+                                    <div class="option">
+                                        <i class="uil uil-copy"></i>
+                                        <span>{scope.lang.dictionary | lang_val 'Copy Text'}</span>
+                                    </div>
+                                    <div class="option">
+                                        <i class="uil uil-share"></i>
+                                        <span>{scope.lang.dictionary | lang_val 'Forward'}</span>
+                                    </div>
+                                    <div class="option">
+                                        <i class="uil uil-trash"></i>
+                                        <span>{scope.lang.dictionary | lang_val 'Delete'}</span>
+                                    </div>
+                                    <div class="option">
+                                        <i class="uil uil-check-circle"></i>
+                                        <span>{scope.lang.dictionary | lang_val 'Select'}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="footer fbe" rv-show="scope.chat.title">
-                    <label class="fcc tool" for="message_file">
-                        <i class="uil uil-paperclip"></i>
-                        <input type="file" id="message_file" rv-on-change="ev.files_to_base64">
-                    </label>
-                    <div class="input w_100">
-                        <div class="text" contenteditable="true" 
-                            id="message_text"
-                            rv-data-placeholder="scope.lang.dictionary | lang_val 'Write a message'" 
-                            rv-on-keydown="ev.on_message_keydown"></div>
+                <div class="footer fbe fdc" rv-show="scope.chat.title">
+                    <div class="w_100 fbe" rv-show="scope.reserve">
+                        <label class="fcc tool" rv-show="scope.reserve.is_edit">
+                            <i class="uil uil-share reverse"></i>
+                        </label>
+                        <label class="fcc tool" rv-show="scope.reserve.is_reply">
+                            <i class="uil uil-pen"></i>
+                        </label>
+                        <div class="input w_100">
+                            <span>{scope.reserve.text}</span>
+                        </div>
+                        <div class="fcc">
+                            <div class="fcc tool" rv-on-click="ev.clear_reserve">
+                                <i class="uil uil-multiply"></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="fcc">
-                        <div class="fcc tool" rv-show="scope.message.txt | is_empty">
-                            <i class="uil uil-microphone"></i>
+                    <div class="w_100 fbe">
+                        <label class="fcc tool" for="message_file">
+                            <i class="uil uil-paperclip"></i>
+                            <input type="file" id="message_file" rv-on-change="ev.files_to_base64">
+                        </label>
+                        <div class="input w_100">
+                            <div class="text" contenteditable="true" 
+                                id="message_text"
+                                rv-data-placeholder="scope.lang.dictionary | lang_val 'Write a message'" 
+                                rv-on-keydown="ev.on_message_keydown"></div>
                         </div>
-                        <div class="fcc tool">
-                            <i class="uil uil-smile"></i>
-                        </div>
-                        <div class="fcc tool" rv-show="scope.message.txt | is_empty">
-                            <i class="uil uil-camera"></i>
-                        </div>
-                        <div class="fcc tool color_primary" rv-show="scope.message.txt | is_not_empty" rv-on-click="ev.message">
-                            <i class="uil uil-message"></i>
+                        <div class="fcc">
+                            <div class="fcc tool" rv-show="scope.message.txt | is_empty">
+                                <i class="uil uil-microphone"></i>
+                            </div>
+                            <div class="fcc tool">
+                                <i class="uil uil-smile"></i>
+                            </div>
+                            <div class="fcc tool" rv-show="scope.message.txt | is_empty">
+                                <i class="uil uil-camera"></i>
+                            </div>
+                            <div class="fcc tool color_primary" rv-show="scope.message.txt | is_not_empty" rv-on-click="ev.message">
+                                <i class="uil uil-message"></i>
+                            </div>
                         </div>
                     </div>
                 </div>

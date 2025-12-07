@@ -1854,6 +1854,8 @@ body.dark .menu_inner .footer span {
   width: min(75%, 100% - 17em);
   align-self: flex-start;
   height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 main.expand .content {
@@ -1905,7 +1907,7 @@ body.dark .content .header .extra {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  height: calc(100vh - 7em);
+  flex: 1;
   overflow: hidden;
 }
 body.light .content .body {
@@ -1927,9 +1929,6 @@ body.dark .content .body {
   min-height: 3em;
   max-height: 17em;
   width: 100%;
-  position: absolute;
-  bottom: 0;
-  left: 0;
   padding: 0;
   border-left: 1px solid;
 }
@@ -2120,6 +2119,60 @@ body.light .message .info span {
 }
 body.dark .message .info span {
   color: #bdbdbd;
+}
+
+.options {
+  position: fixed;
+  border-radius: 3px;
+  min-width: 10em;
+  padding: 0.5em 0;
+  z-index: 9;
+}
+body.light .options {
+  box-shadow: 0px 0px 1px #000;
+}
+body.dark .options {
+  box-shadow: 0px 0px 1px #fff;
+}
+body.light .options {
+  background-color: #fff;
+}
+body.dark .options {
+  background-color: #131a22;
+}
+
+.options .option {
+  padding: 0.5em 1.5em;
+  width: 100%;
+  cursor: pointer;
+}
+body.light .options .option {
+  color: #000;
+}
+body.dark .options .option {
+  color: #fff;
+}
+
+body.light .options .option:hover {
+  background-color: #f1f1f1;
+}
+body.dark .options .option:hover {
+  background-color: #242f3d;
+}
+
+.options .option i {
+  font-size: 1.25em;
+  padding-inline-end: 6px;
+}
+body.light .options .option i {
+  color: #000;
+}
+body.dark .options .option i {
+  color: #fff;
+}
+
+.uil.reverse:before {
+  transform: rotateY(180deg);
 }
 
 .alert {

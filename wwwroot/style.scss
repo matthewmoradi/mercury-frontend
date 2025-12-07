@@ -2132,6 +2132,8 @@ main.expand .aside .item.inner i {
     width: Min(75%, calc(100% - 17em));
     align-self: flex-start;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 main.expand .content {
@@ -2170,7 +2172,8 @@ main.expand .content {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    height: calc(100vh - 7em);
+    // height: calc(100vh - 7em);
+    flex: 1;
     overflow: hidden;
     @include background_color_quaternary();
 }
@@ -2187,9 +2190,9 @@ main.expand .content {
     min-height: 3em;
     max-height: 17em;
     width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
+    // position: absolute;
+    // bottom: 0;
+    // left: 0;
     padding: 0;
     border-left: 1px solid;
     @include border_color_quaternary();
@@ -2332,6 +2335,40 @@ main.expand .content {
     @include color_txt_label();
     font-weight: 200;
     font-size: 0.9em;
+}
+
+// #endregion
+
+// #region options
+.options {
+    position: fixed;
+    border-radius: 3px;
+    min-width: 10em;
+    padding: 0.5em 0;
+    z-index: 9;
+    @include card_shadow();
+    @include background_color_main();
+}
+
+.options .option {
+    padding: 0.5em 1.5em;
+    width: 100%;
+    cursor: pointer;
+    @include color_txt_primary();
+}
+
+.options .option:hover {
+    @include background_color();
+}
+
+.options .option i {
+    font-size: 1.25em;
+    padding-inline-end: 6px;
+    @include color_txt_primary();
+}
+
+.uil.reverse:before {
+    transform: rotateY(180deg);
 }
 
 // #endregion

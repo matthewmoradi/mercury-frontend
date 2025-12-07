@@ -478,8 +478,7 @@ ev.chat_get_or_add = async function (id, username, unread) {
     }
     //success
     setTimeout(_ => {
-        let msgs = $(".content .body .messages");
-        msgs.scrollTo(0, msgs.scrollHeight);
+        scroll_to_bottom($(".content .body .messages"));
     }, 200);
     ev.on_chat_open(d.data.id, unread);
     return d.data;
@@ -521,7 +520,7 @@ ev.on_content_header = async function () {
 ev.on_message_keydown = function (e) {
     if (this.innerText == "<br>" || this.innerText == "\n")
         this.innerText = "";
-    if(!e.shiftKey && e.key == "Enter") {
+    if (!e.shiftKey && e.key == "Enter") {
         e.preventDefault();
         e.stopPropagation();
         scope.message.txt = this.innerText;
@@ -530,7 +529,6 @@ ev.on_message_keydown = function (e) {
     }
     scope.message.txt = this.innerText;
 }
-
 
 /**
  * Gets contact user info.
@@ -585,6 +583,71 @@ ev.on_chat_open = async function (chat_id, unread) {
     }
     await ev.chat_get_list();
 }
+
+/**
+ * hides all options menu
+ * 
+ * @return {void}
+ */
+ev.hide_options = function () {
+    $$(".options").forEach(el => {
+        el.classList.add("none");
+    });
+}
+
+/**
+ * shows message options menu
+ * 
+ * @return {void}
+ */
+ev.show_message_options = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var options = this.querySelector(".options");
+    if (e.target.classList.contains("options")) return;
+    if (options.contains(e.target)) return;
+    // 
+    var bcr = this.getBoundingClientRect();
+    ev.hide_options();
+    options.classList.remove("none");
+    if (bcr.left < window.outerWidth / 2)
+        options.style.left = e.clientX + "px";
+    else
+        options.style.left = (e.clientX - options.clientWidth)  + "px";
+    if (bcr.top < window.outerHeight / 2)
+        options.style.top = (e.clientY) + "px";
+    else
+        options.style.top = (e.clientY - options.clientHeight) + "px";
+    return false;
+}
+
+/**
+ * Clear reserve
+ * 
+ * @return {void}
+ */
+ev.clear_reserve = async function() {
+    scope.reserve = undefined;
+}
+
+/**
+ * Prepares screen for editing message
+ * 
+ * @param {string} chat_id from parameters, chat id
+ * 
+ * @return {Promise<object>}
+ */
+ev.message_edit_prepare = async function() {
+    ev.hide_options();
+    let i = this.parentElement.dataset.i;
+    let message = scope.chat.messages[i];
+    scope.reserve = {
+        is_edit: true,
+        text: message.text,
+    };
+    scroll_to_bottom($(".content .body .messages"));
+}
+
 //#endregion
 
 //#region autocomplete

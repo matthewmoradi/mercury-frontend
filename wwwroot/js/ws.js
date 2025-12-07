@@ -52,7 +52,7 @@ socket_onclose = function (event) {
         tries++;
         if (tries > 3)
             return;
-        init();
+        socket_init();
     }
 };
 

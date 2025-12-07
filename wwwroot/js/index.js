@@ -24,6 +24,10 @@ function $$(x) {
     return document.querySelectorAll(x);
 }
 
+function scroll_to_bottom(elem) {
+    elem.scrollTo(0, elem.scrollHeight);
+}
+
 /**
  * Gets an item from cookies with a key
  *
@@ -56,6 +60,7 @@ function cookie_set(name, value, days) {
     }
     document.cookie = name + "=" + (value || "") + expires + "; path=/";
 }
+
 function cookie_delete(name) {
     document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 }
@@ -166,11 +171,11 @@ function params_from(d) {
     if (!d) return "";
     try {
         d = utf8_decode(d);
-    } catch (ex) {}
+    } catch (ex) { }
     d = JSON.parse(d);
     try {
         d.data = JSON.parse(d.data);
-    } catch (ex) {}
+    } catch (ex) { }
 
     params_from_handle_code(d);
     return d;
@@ -186,7 +191,7 @@ function params_from(d) {
  *
  * @return {string} plain stringified data
  */
- function params_from_handle_code(d) {
+function params_from_handle_code(d) {
     if (d && d.code == 301) {
         // loading(true);
         window.onbeforeunload = null;
@@ -951,6 +956,21 @@ function autocomplete_hide() {
 }
 
 /**
+ * Hides all options elements on clicking anywhere.
+ *
+ * @return {void}
+ */
+function options_hide() {
+    window.addEventListener("click", function (e) {
+        $$(".options").forEach(el => {
+            if (e.target.classList.contains("options")) return;
+            if (el.contains(e.target)) return;
+            el.classList.add("none");
+        });
+    });
+}
+
+/**
  * Hides error messages on input changes.
  *
  * @return {void}
@@ -958,7 +978,6 @@ function autocomplete_hide() {
 function error_hide() {
     // $$(".autocomplete")
 }
-
 
 /**
  * Listens for Iframe messages, e.g payment result iframe
@@ -1089,7 +1108,7 @@ function init_login() {
     if (section && section == "r") {
         scope.login_section = 2;
     }
-    setTimeout(function(){
+    setTimeout(function () {
         $(".body_inner ").classList.remove("none");
         loading(false);
     }, 500);
@@ -1110,7 +1129,7 @@ async function init_index() {
     $("#overlay").addEventListener("click", ev.menu_hide);
     $$(".modal").forEach(el => {
         el.addEventListener("click", ev.modal_close_listener);
-    })
+    });
     $("#main").addEventListener("click", function (e) {
         // ev.filter_hide(e);
         if (e.target.dataset.hasOwnProperty("auto_key")) return;
@@ -1141,11 +1160,11 @@ function init_self() {
     scope.self = {};
     scope.self.token = token;
     scope.self.id = user_id;
-    if (token == null || user_id == null){
+    if (token == null || user_id == null) {
         if (!is_login) { //index
             logout();
         }
-    } else if(is_login){
+    } else if (is_login) {
         location.href = "/";
     }
 }
@@ -1284,6 +1303,7 @@ function init_basic() {
         is_index = false;
     return is_index;
 }
+
 /**
  * Initialize the app
  *
@@ -1315,8 +1335,7 @@ async function init() {
     loading(false);
 }
 
-function get_server_addr()
-{
+function get_server_addr() {
     fetch(window.location.origin + path_base(window.location.pathname) + "/srv.json").then(function (res) {
         return res.json();
     }).then(function (resp) {
@@ -1330,12 +1349,11 @@ function get_server_addr()
     });
 }
 
-function get_language()
-{
+function get_language() {
     fetch(window.location.origin + path_base(window.location.pathname) + "/lang.json").then(function (res) {
         return res.json();
     }).then(function (resp) {
-        if(!scope.lang)
+        if (!scope.lang)
             scope.lang = {};
         scope.lang.dictionary = resp;
     }).catch(err => {
@@ -1357,14 +1375,15 @@ async function main() {
     get_server_addr();
     get_language();
     $$(".input").forEach(el => {
-        el.addEventListener("click", function(e){
-            if(el.querySelector("input")) el.querySelector("input").focus();
-            if(el.querySelector("textarea")) el.querySelector("textarea").focus();
+        el.addEventListener("click", function (e) {
+            if (el.querySelector("input")) el.querySelector("input").focus();
+            if (el.querySelector("textarea")) el.querySelector("textarea").focus();
         });
     })
     document.addEventListener("keyup", keyup_handle);
     listen_iframe_messages();
     autocomplete_hide();
+    options_hide();
     error_hide();
     img_def = $("#img_def") ? $("#img_def").src : "";
     history.pushState(null, document.title, location.href);
